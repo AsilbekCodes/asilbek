@@ -1,0 +1,70 @@
+import React, { useEffect, useState } from 'react';
+
+const About = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+      setScrollProgress(progress);
+    };
+
+    handleScroll();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
+
+  return (
+    <>
+      <section className="section-title">
+          <div className="container">
+              <div className="section-content">
+                  <h1>About Me</h1>
+              </div>
+          </div>
+      </section>
+
+      <section id="about-me" className="article-wrapper flex align-items-center" style={{ padding: 0 }}>
+          <div className="container content">
+              <div className="row justify-center">
+                  <article className="col-lg-8 col-md-10 col-12">
+                    <p>I am <strong>Asilbek Abdunabiyev</strong>, a <strong>Full Stack Developer</strong> from
+    Samarkand, Uzbekistan, currently studying Economics at Samarkand State University.</p>
+
+<p>I specialize in building backend systems using Python and PHP, along with modern web technologies, with a strong
+    focus on efficiency, simplicity, and reliability.</p>
+
+<p>I have hands-on experience in developing REST APIs, Telegram bots, and integrating payment systems. I
+    enjoy solving complex backend problems and optimizing systems for better performance.</p>
+
+<p>Beyond coding, I actively share knowledge through tutorials, blog posts, and personal projects. I
+    believe in continuous learning and constantly improving my skills.</p>
+
+<p>While my primary focus is backend development, I also have experience with frontend technologies
+    including HTML, CSS, Bootstrap, TailwindCSS, and JavaScript.</p>
+
+<p>Outside of tech, I try to shape my path with <strong>discipline</strong> and <strong>Islamic values</strong>,
+    which guide both my character and how I approach my work.</p>
+
+                      <p>You can connect with me and follow my latest updates on my{' '}
+                          <a href="https://t.me/Abdunabiyev" target="_blank" rel="noreferrer">Telegram Channel</a>.
+                      </p>
+                  </article>
+              </div>
+          </div>
+      </section>
+
+      <div className="progress-bar">
+          <div className="bar" style={{ width: `${scrollProgress}%` }}></div>
+      </div>
+    </>
+  );
+};
+
+export default About;
