@@ -164,3 +164,14 @@ body.dark-mode .mobile-menu-link.is-active {
   background: rgba(30,144,255,0.15);
   color: #4db2ff;
 }
+
+/* Fix button wrapper spacing on mobile — consistent gaps when buttons wrap */
+.btns-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.btns-wrapper .btn:not(:last-child) {
+  margin-right: 0;
+}
+
