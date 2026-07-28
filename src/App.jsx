@@ -16,7 +16,7 @@ function App() {
   });
 
   const [socialLinks] = useState([
-    { platform: 'telegram', url: 'https://t.me/Dasturchim' },
+    { platform: 'telegram', url: 'https://t.me/asilbekdevbot' },
     { platform: 'github', url: 'https://github.com/AsilbekCodes' },
     { platform: 'linkedin', url: 'https://www.linkedin.com/in/asilbek-abdunabiyev-0064a436a/' },
     { platform: 'instagram', url: 'https://instagram.com/asilbekdev_' }
