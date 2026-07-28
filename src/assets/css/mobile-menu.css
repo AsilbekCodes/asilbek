@@ -216,3 +216,49 @@ body.dark-mode .mobile-menu-link.is-active {
 body.dark-mode #home .about-detail .desc {
   color: rgba(255,255,255,0.55);
 }
+
+/* ===================================================================
+   FIX: mobile nav uch tugma (theme / language / burger) bir xil
+   balandlik va tekislikda tursin
+   =================================================================== */
+.nav--mobile-controls {
+  display: none;
+  align-items: center;
+  margin-left: auto;
+  gap: 8px;
+}
+
+.theme-toggle-btn,
+.lang-switcher-btn,
+.burger-btn {
+  height: 38px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  background: transparent;
+}
+
+.theme-toggle-btn,
+.burger-btn {
+  width: 38px;
+  border-radius: 50%;
+}
+
+.lang-switcher-btn {
+  border-radius: 50px;
+  padding: 0 12px;
+}
+
+@media (max-width: 480px) {
+  .theme-toggle-btn,
+  .burger-btn {
+    width: 34px;
+    height: 34px;
+  }
+  .lang-switcher-btn {
+    height: 34px;
+    padding: 0 8px;
+  }
+}
