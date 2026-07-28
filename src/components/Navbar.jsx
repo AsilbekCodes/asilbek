@@ -73,10 +73,9 @@ const Navbar = ({ settings }) => {
               <li><LanguageSwitcher /></li>
             </ul>
 
-            {/* Mobile-only controls */}
+            {/* Mobile-only controls: theme toggle + burger. Language switcher lives inside the slide-in menu. */}
             <div className="nav--mobile-controls">
               <ThemeToggle />
-              <LanguageSwitcher />
               <button
                 ref={openBtnRef}
                 type="button"
@@ -124,6 +123,10 @@ const Navbar = ({ settings }) => {
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
+            </div>
+
+            <div className="mobile-menu-lang">
+              <LanguageSwitcher />
             </div>
 
             <nav className="mobile-menu-links">
