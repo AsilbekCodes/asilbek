@@ -175,3 +175,38 @@ body.dark-mode .mobile-menu-link.is-active {
   margin-right: 0;
 }
 
+/* Prevent header from wrapping to a second line on narrow screens */
+.header--title .container > .align-items-center.flex {
+  flex-wrap: nowrap;
+}
+@media (max-width: 480px) {
+  header .logo {
+    font-size: 19px;
+  }
+  .nav--mobile-controls {
+    gap: 6px;
+  }
+  .lang-switcher-btn {
+    padding: 6px 8px;
+  }
+  .lang-switcher-btn span {
+    display: none;
+  }
+  .lang-flag {
+    margin-right: 0;
+  }
+  .lang-switcher-btn .lang-chevron {
+    margin-left: 4px;
+  }
+  .theme-toggle-btn,
+  .burger-btn {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* Fix low-contrast subtitle text in dark mode */
+body.dark-mode #home .about-detail .desc {
+  color: rgba(255,255,255,0.55);
+}
+
