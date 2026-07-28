@@ -5,7 +5,6 @@ import { useLanguage } from '../context/LanguageContext';
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: 'gb' },
   { code: 'ru', label: 'Русский', flag: 'ru' },
-  { code: 'uz', label: "O'zbekcha", flag: 'uz' },
   { code: 'tj', label: 'Тоҷикӣ', flag: 'tj' },
 ];
 
@@ -14,7 +13,7 @@ const LanguageSwitcher = () => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
-  const active = LANGUAGES.find(l => l.code === lang) || LANGUAGES[2];
+  const active = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
   useEffect(() => {
     const handleClickOutside = (e) => {
