@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "resume": "Resume",
+    "blog": "Blog",
+    "about": "About",
+    "channel": "Channel",
+    "portfolio": "Portfolio"
+  },
+  "home": {
+    "role": "Full Stack Developer",
+    "tagline": "I write about non-technical stuff in the technical world.",
+    "readBlog": "Read Blog",
+    "aboutMe": "About Me",
+    "donate": "Donat qilish"
+  },
+  "about": {
+    "title": "Men haqimda"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Batafsil o'qish"
+  },
+  "footer": {
+    "rights": "Barcha huquqlar himoyalangan"
+  }
+}

@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import About from './pages/About';
 import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
+import { LanguageProvider } from './context/LanguageContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   const [settings] = useState({
@@ -56,17 +58,19 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <>
-      <Navbar settings={settings} />
-      <Routes location={location}>
-        <Route path="/" element={<Home socialLinks={socialLinks} />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/blog" element={<BlogList settings={settings} />} />
-        <Route path="/blog/:slug" element={<BlogPost settings={settings} />} />
-        <Route path="/:slug" element={<BlogPost settings={settings} />} />
-      </Routes>
-      <Footer />
-    </>
+    <ThemeProvider>
+      <LanguageProvider>
+        <Navbar settings={settings} />
+        <Routes location={location}>
+          <Route path="/" element={<Home socialLinks={socialLinks} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<BlogList settings={settings} />} />
+          <Route path="/blog/:slug" element={<BlogPost settings={settings} />} />
+          <Route path="/:slug" element={<BlogPost settings={settings} />} />
+        </Routes>
+        <Footer />
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1034,6 +1034,21 @@ article pre {
   margin-bottom: 20px;
 }
 
+.btn.btn-donate {
+  background: linear-gradient(90deg, #1e90ff, #00d2ff);
+  border: none;
+  color: #fff;
+  box-shadow: 0 5px 10px 0 rgba(0,0,0,0.15);
+  display: inline-flex;
+  align-items: center;
+}
+.btn.btn-donate:hover {
+  opacity: 0.9;
+}
+.btn.btn-donate svg {
+  margin-right: 8px;
+}
+
 .talks li a.list-item {
   flex: 1;
   margin-left: 20px;
