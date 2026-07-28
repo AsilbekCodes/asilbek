@@ -203,6 +203,13 @@ body.dark-mode .mobile-menu-link.is-active {
     width: 34px;
     height: 34px;
   }
+  .lang-switcher-btn {
+    height: 34px;
+    box-sizing: border-box;
+  }
+  .nav--mobile-controls {
+    align-items: center;
+  }
 }
 
 /* Fix low-contrast subtitle text in dark mode */
