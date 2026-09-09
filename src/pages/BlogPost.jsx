@@ -25,32 +25,30 @@ const TelegramEmbed = ({ post }) => {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    
-    // Clear container
+
     containerRef.current.innerHTML = '';
-    
-    // Create script element
+
     const script = document.createElement('script');
     script.src = 'https://telegram.org/js/telegram-widget.js?24';
     script.async = true;
     script.setAttribute('data-telegram-post', post);
     script.setAttribute('data-width', '100%');
     script.setAttribute('data-userpic', 'true');
-    
+
     containerRef.current.appendChild(script);
   }, [post]);
 
   return (
-    <div 
-      ref={containerRef} 
-      className="telegram-embed-container" 
-      style={{ 
-        width: '100%', 
-        minHeight: '150px', 
-        display: 'flex', 
+    <div
+      ref={containerRef}
+      className="telegram-embed-container"
+      style={{
+        width: '100%',
+        minHeight: '150px',
+        display: 'flex',
         justifyContent: 'center',
-        margin: '20px 0' 
-      }} 
+        margin: '20px 0'
+      }}
     />
   );
 };
@@ -62,6 +60,7 @@ const BlogPost = () => {
   const [prevPost, setPrevPost] = useState(null);
   const [nextPost, setNextPost] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,7 +83,6 @@ const BlogPost = () => {
     const fetchPostAndPagination = async () => {
       try {
         setLoading(true);
-        // Fetch current post
         const response = await axios.get(`https://api.telegra.ph/getPage/${slug}?return_content=true`);
         if (response.data.ok) {
           const pageTitle = response.data.result.title.toLowerCase();
@@ -97,7 +95,6 @@ const BlogPost = () => {
           setBlog(response.data.result);
           document.title = response.data.result.title + " - Asilbek Abdunabiyev";
 
-          // Fetch list to find previous and next
           const listResponse = await axios.get(`https://api.telegra.ph/getPageList?access_token=${TELEGRAPH_TOKEN}&limit=100`);
           if (listResponse.data.ok) {
             const pages = listResponse.data.result.pages.filter(page => {
@@ -107,9 +104,6 @@ const BlogPost = () => {
             const currentIndex = pages.findIndex(p => p.path === slug);
 
             if (currentIndex !== -1) {
-              // Pages are ordered newest first.
-              // So older post is at index + 1 (Previous chronologically)
-              // Newer post is at index - 1 (Next chronologically)
               if (currentIndex < pages.length - 1) {
                 setPrevPost(pages[currentIndex + 1]);
               } else {
@@ -134,6 +128,13 @@ const BlogPost = () => {
     };
     fetchPostAndPagination();
   }, [slug]);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const renderNode = (node, index) => {
     if (typeof node === 'string') {
@@ -183,9 +184,11 @@ const BlogPost = () => {
 
   if (!loading && !blog) return <div style={{ textAlign: 'center', marginTop: '100px', minHeight: '80vh' }}>Article not found.</div>;
 
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const postTitle = blog?.title || '';
+
   return (
     <>
-
       <section className="flex align-items-start" style={{ minHeight: '80vh' }}>
         <div className="container">
           <div className="row article-wrapper justify-center align-top">
@@ -226,6 +229,29 @@ const BlogPost = () => {
                 blog.content ? blog.content.map((node, i) => renderNode(node, i)) : null
               )}
             </article>
+
+            {!loading && blog && (
+              <div className="col-md-8 col-12">
+                <div className="article-share">
+                  <span className="share-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    Share this article
+                  </span>
+                  <div className="share-buttons">
+                    <a className="share-btn share-tg" href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(postTitle)}`} target="_blank" rel="noopener noreferrer" title="Share on Telegram">Telegram</a>
+                    <a className="share-btn share-li" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`} target="_blank" rel="noopener noreferrer" title="Share on LinkedIn">LinkedIn</a>
+                    <button className="share-btn share-copy" onClick={handleCopyLink} type="button" title="Copy link to clipboard">Copy Link</button>
+                    {copied && <div className="share-copy-toast">Copied to clipboard!</div>}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="div col-lg-7 col-md-8 col-12">
               <div className="subscribe-form " id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form">
