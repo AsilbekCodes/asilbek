@@ -430,8 +430,7 @@ const BlogList = () => {
                 You can find my latest articles,
                 lectures, and lessons on my Telegram
                 channel{' '}
-
-                
+                <a
                   href="https://t.me/Abdunabiyev"
                   target="_blank"
                   rel="noopener noreferrer"
