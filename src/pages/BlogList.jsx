@@ -109,29 +109,32 @@ const BlogList = () => {
           //
           // Telegraph aynan Title-MM-DD formatidan
           // foydalanadi.
+          //
+          // MUHIM: agar bir xil kunda bir xil path
+          // (title) allaqachon mavjud bo'lsa, Telegraph
+          // oxiriga qo'shimcha "-2", "-3" kabi raqam
+          // qo'shib qo'yadi. Masalan:
+          //
+          // Mavzu-09-14-2
+          //
+          // Shuning uchun oy/kunni pathning oxiridan
+          // emas, regex bilan aniq topamiz.
           // --------------------------------------
-
-          const pathParts = page.path.split('-');
 
           let monthNumber = null;
           let dayNumber = null;
 
-          if (pathParts.length >= 2) {
-            const possibleMonth = parseInt(
-              pathParts[pathParts.length - 2],
-              10
-            );
+          const dateMatch = page.path.match(
+            /-(\d{1,2})-(\d{1,2})(?:-\d+)?$/
+          );
 
-            const possibleDay = parseInt(
-              pathParts[pathParts.length - 1],
-              10
-            );
+          if (dateMatch) {
+            const possibleMonth = parseInt(dateMatch[1], 10);
+            const possibleDay = parseInt(dateMatch[2], 10);
 
             if (
-              !isNaN(possibleMonth) &&
               possibleMonth >= 1 &&
               possibleMonth <= 12 &&
-              !isNaN(possibleDay) &&
               possibleDay >= 1 &&
               possibleDay <= 31
             ) {
@@ -428,7 +431,7 @@ const BlogList = () => {
                 lectures, and lessons on my Telegram
                 channel{' '}
 
-                <a
+                
                   href="https://t.me/Abdunabiyev"
                   target="_blank"
                   rel="noopener noreferrer"
