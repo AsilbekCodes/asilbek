@@ -64,7 +64,7 @@ const Navbar = ({ settings }) => {
                     </Link>
                   ) : (
                     <a className="list-item" href={item.to} target="_blank" rel="noreferrer">
-                      {t(item.key)}
+                      {item.label || t(item.key)}
                     </a>
                   )}
                 </li>
@@ -141,7 +141,7 @@ const Navbar = ({ settings }) => {
                       to={item.to}
                       onClick={() => setMobileOpen(false)}
                     >
-                      {t(item.key)}
+                      {item.label || t(item.key)}
                     </Link>
                   ) : (
                     <a
@@ -151,7 +151,7 @@ const Navbar = ({ settings }) => {
                       rel="noreferrer"
                       onClick={() => setMobileOpen(false)}
                     >
-                      {t(item.key)}
+                      {item.label || t(item.key)}
                     </a>
                   )}
                 </div>
