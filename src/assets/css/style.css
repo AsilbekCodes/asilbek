@@ -379,47 +379,83 @@ footer p {
   box-sizing: border-box;
 }
 #home .about {
-  margin-bottom: 35px;
+  margin-bottom: 26px;
 }
 #home .profile-picture {
-  max-width: 140px;
-  margin-right: 40px;
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  object-position: center;
   border-radius: 50%;
+  margin-right: 35px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 @media (max-width: 767.98px) {
   #home .profile-picture {
-    max-width: 100px;
+    width: 100px;
+    height: 100px;
+    margin-right: 0;
     margin-bottom: 15px;
   }
 }
+#home .about-detail .title {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  color: rgba(0, 0, 0, 0.85);
+}
+#home .about-detail .desc {
+  font-size: 26px;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 400;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
 #home .social-links {
-  margin-top: 15px;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 #home .social-links a {
-  margin-right: 15px;
+  margin-right: 0;
   color: #000;
-  font-size: 22px;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-#home .social-links .icon-indiehackers {
-  width: 20px;
-  position: relative;
-  top: -1px;
+#home .social-links a:hover {
+  opacity: 0.7;
+  transform: translateY(-1px);
+}
+#home .social-links a img {
+  width: 19px;
+  height: 19px;
+}
+#home .detail p.size-big {
+  font-size: 20px !important;
+  line-height: 1.5;
+  margin-bottom: 26px;
+  color: rgba(0, 0, 0, 0.75);
+}
+#home .btns-wrapper .btn {
+  padding: 7px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
 }
 @media (max-width: 767.98px) {
   #home .about-detail {
     width: 100%;
   }
   #home .about-detail .desc {
-    font-size: 25px;
+    font-size: 22px;
   }
-}
-#home .about-detail .title {
-  font-weight: 700;
-  margin-bottom: 3px;
-}
-#home .about-detail .desc {
-  color: rgba(0,0,0,0.5);
-  font-weight: 400;
+  #home .about-detail .title {
+    font-size: 32px;
+  }
 }
 #post-banner {
   display: block;
@@ -1070,3 +1106,96 @@ article pre {
 .share-btn.share-li:hover { background: #0A66C2; color: #fff; border-color: #0A66C2; }
 .share-btn.share-copy:hover { background: #1e90ff; color: #fff; border-color: #1e90ff; }
 .share-copy-toast { position: absolute; top: -35px; right: 0; background: #1e90ff; color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); }
+
+/* ===== Projects Section (added) ===== */
+.projects-list .project-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 30px 18px 0;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.projects-list .project-thumb-wrapper {
+  flex-shrink: 0;
+  width: 140px;
+  height: 90px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fbfbfd;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+}
+
+.projects-list .project-thumb {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.projects-list .project-item:hover .project-thumb {
+  transform: scale(1.05);
+}
+
+.projects-list .project-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.projects-list .project-meta {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.projects-list .project-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 5px 0;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.projects-list .project-description {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.projects-list .project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.projects-list .project-tag {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  background: #f1f3f5;
+  color: #495057;
+  border-radius: 4px;
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 576px) {
+  .projects-list .project-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-right: 25px;
+  }
+  .projects-list .project-thumb-wrapper {
+    width: 100%;
+    height: 180px;
+  }
+}

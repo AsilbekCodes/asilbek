@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
-import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import { useLanguage } from '../context/LanguageContext';
 import '../assets/css/mobile-menu.css';
@@ -20,18 +19,15 @@ const Navbar = ({ settings }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  // Lock body scroll while menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  // Escape key closes menu
   useEffect(() => {
     if (!mobileOpen) return;
     const handleKeyDown = (e) => {
@@ -42,8 +38,9 @@ const Navbar = ({ settings }) => {
   }, [mobileOpen]);
 
   const navLinks = [
-    { key: 'nav.blog', to: '/blog', type: 'internal' },
     { key: 'nav.about', to: '/about', type: 'internal' },
+    { key: 'nav.projects', to: '/projects', type: 'internal', label: 'Projects' },
+    { key: 'nav.blog', to: '/blog', type: 'internal' },
     settings?.resume_file && { key: 'nav.resume', to: settings.resume_file, type: 'external' },
     settings?.telegram_channel && { key: 'nav.channel', to: settings.telegram_channel, type: 'external' },
     { key: 'nav.portfolio', to: 'https://asilbekdev.uz/uz', type: 'external' },
@@ -58,22 +55,23 @@ const Navbar = ({ settings }) => {
               <Link className="logo" to="/">Asilbek's Blog</Link>
             </div>
 
-            {/* Desktop nav */}
             <ul className="nav align-items-center nav--desktop">
               {navLinks.map((item) => (
                 <li key={item.key}>
                   {item.type === 'internal' ? (
-                    <Link className="list-item" to={item.to}>{t(item.key)}</Link>
+                    <Link className="list-item" to={item.to}>
+                      {item.label || t(item.key)}
+                    </Link>
                   ) : (
-                    <a className="list-item" href={item.to} target="_blank" rel="noreferrer">{t(item.key)}</a>
+                    <a className="list-item" href={item.to} target="_blank" rel="noreferrer">
+                      {t(item.key)}
+                    </a>
                   )}
                 </li>
               ))}
               <li><ThemeToggle /></li>
-              <li><LanguageSwitcher /></li>
             </ul>
 
-            {/* Mobile-only controls: theme toggle + burger. Language switcher lives inside the slide-in menu. */}
             <div className="nav--mobile-controls">
               <ThemeToggle />
               <button
@@ -95,7 +93,6 @@ const Navbar = ({ settings }) => {
         </div>
       </header>
 
-      {/* Mobile slide-in menu, rendered via portal */}
       {createPortal(
         <>
           <div
@@ -110,7 +107,9 @@ const Navbar = ({ settings }) => {
             aria-label="Navigation menu"
           >
             <div className="mobile-menu-header">
-              <Link className="logo" to="/" onClick={() => setMobileOpen(false)}>Asilbek's Blog</Link>
+              <Link className="logo" to="/" onClick={() => setMobileOpen(false)}>
+                Asilbek's Blog
+              </Link>
               <button
                 ref={closeBtnRef}
                 type="button"
@@ -125,10 +124,6 @@ const Navbar = ({ settings }) => {
               </button>
             </div>
 
-            <div className="mobile-menu-lang">
-              <LanguageSwitcher />
-            </div>
-
             <nav className="mobile-menu-links">
               {navLinks.map((item, index) => (
                 <div
@@ -138,7 +133,11 @@ const Navbar = ({ settings }) => {
                 >
                   {item.type === 'internal' ? (
                     <Link
-                      className={`mobile-menu-link ${location.pathname === item.to ? 'is-active' : ''}`}
+                      className={
+                        location.pathname === item.to
+                          ? 'mobile-menu-link is-active'
+                          : 'mobile-menu-link'
+                      }
                       to={item.to}
                       onClick={() => setMobileOpen(false)}
                     >

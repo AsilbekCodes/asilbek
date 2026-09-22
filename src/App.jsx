@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
+import Projects from './pages/Projects';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -66,6 +67,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<BlogList settings={settings} />} />
           <Route path="/blog/:slug" element={<BlogPost settings={settings} />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/:slug" element={<BlogPost settings={settings} />} />
         </Routes>
         <Footer />
