@@ -2,11 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import profilePic from '../assets/images/asilbek.jpg';
 import useStaggerAnimation from '../hooks/useStaggerAnimation';
+import useSEO from '../hooks/useSEO';
 import { useLanguage } from '../context/LanguageContext';
 
 const Home = ({ socialLinks }) => {
   const animRef = useStaggerAnimation();
   const { t } = useLanguage();
+
+  useSEO();
 
   return (
     <section id="home" className="flex align-items-center">
@@ -14,7 +17,7 @@ const Home = ({ socialLinks }) => {
             <div className="row justify-between">
                 <div className="col-xl-8 col-lg-10 col-12 stagger-animation" ref={animRef}>
                     <div className="about flex align-items-center">
-                        <img className="anim-item profile-picture align-self-start" src={profilePic} alt="Abdulbosit" />
+                        <img className="anim-item profile-picture align-self-start" src={profilePic} alt="Asilbek" />
                         <div className="about-detail anim-item">
                             <h1 className="title">Asilbek Abdunabiyev</h1>
                              <h3 className="desc">{t('home.role')}</h3>

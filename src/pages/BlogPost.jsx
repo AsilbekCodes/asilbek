@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import NotFound from './NotFound';
 
 const TELEGRAPH_TOKEN = import.meta.env.VITE_TELEGRAPH_TOKEN;
+
+// Ochilgan maqolalar shu yerda saqlanadi (qayta ochilganda darrov ko'rinadi)
+const postCache = {};
 
 const getTelegramPostId = (src) => {
   try {
@@ -53,6 +57,11 @@ const TelegramEmbed = ({ post }) => {
   );
 };
 
+const isDeletedTitle = (title) => {
+  const t = (title || '').toLowerCase();
+  return t.includes('deleted') || t === "o'chirilgan" || t === 'ochirilgan';
+};
+
 const BlogPost = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
@@ -80,53 +89,71 @@ const BlogPost = () => {
   }, [loading]);
 
   useEffect(() => {
+    let isMounted = true;
+    const cached = postCache[slug];
+
+    if (cached) {
+      // Oldin ochilgan: darrov ko'rsatamiz
+      setBlog(cached.blog);
+      setPrevPost(cached.prev);
+      setNextPost(cached.next);
+      setLoading(false);
+      document.title = cached.blog.title + ' - Asilbek Abdunabiyev';
+    } else {
+      // Yangi: skeleton ko'rsatamiz
+      setBlog(null);
+      setPrevPost(null);
+      setNextPost(null);
+      setLoading(true);
+      document.title = 'Loading Article... - Asilbek Abdunabiyev';
+    }
+
     const fetchPostAndPagination = async () => {
       try {
-        setLoading(true);
         const response = await axios.get(`https://api.telegra.ph/getPage/${slug}?return_content=true`);
-        if (response.data.ok) {
-          const pageTitle = response.data.result.title.toLowerCase();
-          if (pageTitle.includes('deleted') || pageTitle === "o'chirilgan" || pageTitle === "ochirilgan") {
-            setBlog(null);
-            setLoading(false);
-            return;
-          }
+        if (!isMounted) return;
 
-          setBlog(response.data.result);
-          document.title = response.data.result.title + " - Asilbek Abdunabiyev";
-
-          const listResponse = await axios.get(`https://api.telegra.ph/getPageList?access_token=${TELEGRAPH_TOKEN}&limit=100`);
-          if (listResponse.data.ok) {
-            const pages = listResponse.data.result.pages.filter(page => {
-              const t = page.title.toLowerCase();
-              return !t.includes('deleted') && t !== "o'chirilgan" && t !== "ochirilgan";
-            });
-            const currentIndex = pages.findIndex(p => p.path === slug);
-
-            if (currentIndex !== -1) {
-              if (currentIndex < pages.length - 1) {
-                setPrevPost(pages[currentIndex + 1]);
-              } else {
-                setPrevPost(null);
-              }
-
-              if (currentIndex > 0) {
-                setNextPost(pages[currentIndex - 1]);
-              } else {
-                setNextPost(null);
-              }
-            }
-          }
-        } else {
+        if (!response.data.ok || isDeletedTitle(response.data.result.title)) {
+          delete postCache[slug];
           setBlog(null);
+          return;
         }
+
+        const post = response.data.result;
+        let prev = null;
+        let next = null;
+
+        const listResponse = await axios.get(`https://api.telegra.ph/getPageList?access_token=${TELEGRAPH_TOKEN}&limit=100`);
+        if (!isMounted) return;
+
+        if (listResponse.data.ok) {
+          const pages = listResponse.data.result.pages.filter((page) => !isDeletedTitle(page.title));
+          const currentIndex = pages.findIndex((p) => p.path === slug);
+
+          if (currentIndex !== -1) {
+            if (currentIndex < pages.length - 1) prev = pages[currentIndex + 1];
+            if (currentIndex > 0) next = pages[currentIndex - 1];
+          }
+        }
+
+        postCache[slug] = { blog: post, prev, next };
+        setBlog(post);
+        setPrevPost(prev);
+        setNextPost(next);
+        document.title = post.title + ' - Asilbek Abdunabiyev';
       } catch (error) {
         console.error("Error fetching post:", error);
+        if (isMounted && !cached) setBlog(null);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
+
     fetchPostAndPagination();
+
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   const handleCopyLink = () => {
@@ -182,7 +209,9 @@ const BlogPost = () => {
     );
   };
 
-  if (!loading && !blog) return <div style={{ textAlign: 'center', marginTop: '100px', minHeight: '80vh' }}>Article not found.</div>;
+  if (!loading && !blog) {
+    return <NotFound isPostNotFound={true} />;
+  }
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
   const postTitle = blog?.title || '';
@@ -194,11 +223,17 @@ const BlogPost = () => {
           <div className="row article-wrapper justify-center align-top">
             <div className="article-header col-md-8">
               <h1 className="title">
-                {loading ? <span style={{ opacity: 0.5 }}>Yuklanmoqda...</span> : <span dangerouslySetInnerHTML={{ __html: blog.title }} />}
+                {loading ? (
+                  <span className="skeleton" style={{ width: '85%', height: '36px', display: 'block', marginBottom: '10px' }}></span>
+                ) : (
+                  <span dangerouslySetInnerHTML={{ __html: blog.title }} />
+                )}
               </h1>
               <div className="date">
                 <span>
-                  {loading ? "..." : (() => {
+                  {loading ? (
+                    <span className="skeleton" style={{ width: '130px', height: '18px', display: 'inline-block' }}></span>
+                  ) : (() => {
                     const pathParts = slug.split('-');
                     let month = new Date().toLocaleString('en-US', { month: 'long' });
                     let year = new Date().getFullYear().toString();
@@ -224,7 +259,15 @@ const BlogPost = () => {
 
             <article className="content col-md-8 col-12">
               {loading ? (
-                <p style={{ color: '#888' }}>Maqola mazmuni yuklanmoqda...</p>
+                <div className="article-skeleton" style={{ width: '100%', marginTop: '20px' }}>
+                  <div className="skeleton skeleton-line" style={{ width: '100%', height: '18px', marginBottom: '15px' }}></div>
+                  <div className="skeleton skeleton-line" style={{ width: '96%', height: '18px', marginBottom: '15px' }}></div>
+                  <div className="skeleton skeleton-line" style={{ width: '92%', height: '18px', marginBottom: '25px' }}></div>
+                  <div className="skeleton" style={{ width: '100%', height: '200px', marginBottom: '25px', borderRadius: '8px' }}></div>
+                  <div className="skeleton skeleton-line" style={{ width: '98%', height: '18px', marginBottom: '15px' }}></div>
+                  <div className="skeleton skeleton-line" style={{ width: '90%', height: '18px', marginBottom: '15px' }}></div>
+                  <div className="skeleton skeleton-line" style={{ width: '85%', height: '18px', marginBottom: '15px' }}></div>
+                </div>
               ) : (
                 blog.content ? blog.content.map((node, i) => renderNode(node, i)) : null
               )}

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { projects } from '../data/projects';
+import useSEO from '../hooks/useSEO';
 
 const Projects = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  useSEO({
+    title: 'Projects',
+    description: 'Projects by Asilbek Abdunabiyev.',
+  });
 
   useEffect(() => {
     const handleScroll = () => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import useSEO from '../hooks/useSEO';
 
 const TELEGRAPH_TOKEN = import.meta.env.VITE_TELEGRAPH_TOKEN;
 
@@ -23,6 +24,11 @@ const BlogList = () => {
   const [blogsByYearMonth, setBlogsByYearMonth] = useState({});
   const [loading, setLoading] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  useSEO({
+    title: 'Blog',
+    description: 'Articles, lectures and lessons by Asilbek Abdunabiyev.',
+  });
 
   // ==========================================
   // SCROLL PROGRESS
@@ -57,8 +63,6 @@ const BlogList = () => {
   // ==========================================
 
   useEffect(() => {
-    document.title = 'Blog - Asilbek Abdunabiyev';
-
     const fetchPosts = async () => {
       try {
         setLoading(true);

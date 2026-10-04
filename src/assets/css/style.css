@@ -1177,6 +1177,73 @@ article pre {
   margin-top: 8px;
 }
 
+/* ===== Skeleton loading ===== */
+.skeleton {
+  background: rgba(128, 128, 128, 0.15);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: skeleton-shimmer 1.4s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ===== 404 / Not Found ===== */
+.not-found-wrapper {
+  padding: 40px 0;
+}
+
+.not-found-code {
+  font-size: 140px;
+  font-weight: 800;
+  line-height: 1;
+  color: #2d9cff;
+  margin-bottom: 10px;
+}
+
+.not-found-title {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.not-found-desc {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 20px;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+@media (max-width: 576px) {
+  .not-found-code {
+    font-size: 96px;
+  }
+  .not-found-title {
+    font-size: 30px;
+  }
+  .not-found-desc {
+    font-size: 17px;
+  }
+}
+
 .projects-list .project-tag {
   font-size: 11px;
   font-weight: 500;
